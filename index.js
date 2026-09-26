@@ -1,15 +1,34 @@
+const express = require("express");
 const path = require("path");
-const express = require('express');
+const dotenv = require("dotenv");
 
-const app=express();
-const port=8000;
+const connectDB = require("./config/db");
 
+dotenv.config();
 
-app.set('view engine','ejs');   
-app.set("views",path.resolve("./views"));
+const app = express();
 
-app.get('/',(req,res)=>{
-    res.render('home');
+const PORT = 5000;
+
+// Connect MongoDB
+connectDB();
+
+// EJS setup
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Static files
+app.use(express.static(path.join(__dirname, "public")));
+
+// Home page
+app.get("/", (req, res) => {
+  res.render("home");
 });
 
-app.listen(port,()=> console.log(`Server is running on port ${port}`));
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
