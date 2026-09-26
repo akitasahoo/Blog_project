@@ -1,7 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
-const crypto = require("crypto");
-
+const transporter = require("../config/mailer");
 // =========================
 // SIGNUP
 // =========================
@@ -95,23 +94,46 @@ exports.forgotPassword = async (req, res) => {
     }
 
     // Generate 6 digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otp = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
 
+    // OTP valid for 10 minutes
     user.resetOTP = otp;
     user.resetOTPExpiry = Date.now() + 10 * 60 * 1000;
 
     await user.save();
 
-    // Email sending will be added with Nodemailer
-    console.log("Password Reset OTP:", otp);
+    // Send email
+    await transporter.sendMail({
+      from: `"My Blog Website" <${process.env.EMAIL_USER}>`,
+      to: user.email,
+      subject: "Password Reset OTP",
+      html: `
+        <div style="font-family: Arial; padding: 20px;">
+          <h2>Password Reset</h2>
 
-    res.send("OTP generated. Email system will be connected next.");
+          <p>Hello ${user.name},</p>
+
+          <p>Your OTP for resetting your password is:</p>
+
+          <h1 style="letter-spacing: 5px;">
+            ${otp}
+          </h1>
+
+          <p>This OTP is valid for <b>10 minutes</b>.</p>
+
+          <p>If you did not request this, you can safely ignore this email.</p>
+        </div>
+      `
+    });
+
+    res.send("OTP sent to your email");
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Something went wrong");
+    console.error("Email Error:", error);
+    res.status(500).send("Unable to send OTP");
   }
 };
-
 // =========================
 // RESET PASSWORD
 // =========================
