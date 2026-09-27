@@ -68,16 +68,30 @@
             required
         >
 
+<label>Select Blog Image</label>
 
-        <label>
-            Select Blog Image
-        </label>
+<input
+    type="file"
+    name="image"
+    id="imageInput"
+    accept="image/*"
+>
 
-        <input
-            type="file"
-            name="image"
-            accept="image/*"
-        >
+<br><br>
+
+<img
+    id="imagePreview"
+    src=""
+    alt="Image Preview"
+    style="
+        display: none;
+        width: 250px;
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    "
+>
 
 
         <textarea
@@ -95,7 +109,22 @@
     </form>
 
 </div>
+<script>
+    const imageInput = document.getElementById("imageInput");
+    const imagePreview = document.getElementById("imagePreview");
 
+    imageInput.addEventListener("change", function () {
+        const file = this.files[0];
+
+        if (file) {
+            imagePreview.src = URL.createObjectURL(file);
+            imagePreview.style.display = "block";
+        } else {
+            imagePreview.src = "";
+            imagePreview.style.display = "none";
+        }
+    });
+</script>
 </body>
 
 </html>

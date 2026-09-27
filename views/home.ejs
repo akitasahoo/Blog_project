@@ -1,13 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>My Blog</title>
 
     <link rel="stylesheet" href="/css/style.css">
+
 </head>
 
 <body>
@@ -70,6 +74,47 @@
         </p>
 
 
+        <!-- SEARCH + CATEGORY FILTER -->
+
+        <div class="search-filter">
+
+            <form action="/" method="GET">
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search blogs..."
+                    value="<%= search || '' %>"
+                >
+
+                <select name="category">
+
+                    <option value="">
+                        All Categories
+                    </option>
+
+                    <% categories.forEach(category => { %>
+
+                        <option
+                            value="<%= category %>"
+                            <%= selectedCategory === category ? "selected" : "" %>
+                        >
+                            <%= category %>
+                        </option>
+
+                    <% }) %>
+
+                </select>
+
+                <button type="submit">
+                    Search
+                </button>
+
+            </form>
+
+        </div>
+
+
         <!-- BLOGS -->
 
         <section>
@@ -81,9 +126,18 @@
 
             <% if (blogs.length === 0) { %>
 
-                <p>
-                    No blogs available yet.
-                </p>
+                <div class="no-results">
+
+                    <h2>
+                        No blogs found 😕
+                    </h2>
+
+                    <p>
+                        Try another search or category.
+                    </p>
+
+                </div>
+
 
             <% } else { %>
 
@@ -96,29 +150,49 @@
                             <%= blog.title %>
                         </h2>
 
-                        <p>
-                            <strong>Category:</strong>
-                            <%= blog.category %>
-                        </p>
 
                         <p>
-                            <strong>Author:</strong>
-                            <%= blog.author.name %>
+
+                            <strong>
+                                Category:
+                            </strong>
+
+                            <%= blog.category %>
+
                         </p>
+
+
+                        <p>
+
+                            <strong>
+                                Author:
+                            </strong>
+
+                            <%= blog.author.name %>
+
+                        </p>
+
 
                         <% if (blog.image) { %>
 
                             <img
                                 src="<%= blog.image %>"
                                 alt="<%= blog.title %>"
-                                style="max-width: 100%; height: 200px; object-fit: cover;"
+                                style="
+                                    max-width: 100%;
+                                    height: 200px;
+                                    object-fit: cover;
+                                    border-radius: 10px;
+                                "
                             >
 
                         <% } %>
 
 
                         <p>
+
                             <%= blog.content.substring(0, 150) %>...
+
                         </p>
 
 

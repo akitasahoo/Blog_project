@@ -4,12 +4,36 @@ const Comment = require("../models/Comment");
 // GET ALL BLOGS
 exports.getAllBlogs = async (req, res) => {
     try {
-        const blogs = await Blog.find()
+        const search = req.query.search || "";
+        const category = req.query.category || "";
+
+        let filter = {};
+
+        // Search filter
+        if (search) {
+            filter.$or = [
+                { title: { $regex: search, $options: "i" } },
+                { content: { $regex: search, $options: "i" } }
+            ];
+        }
+
+        // Category filter
+        if (category) {
+            filter.category = category;
+        }
+
+        const blogs = await Blog.find(filter)
             .populate("author", "name")
             .sort({ createdAt: -1 });
 
+        // Get all categories
+        const categories = await Blog.distinct("category");
+
         res.render("home", {
             blogs,
+            categories,
+            search,
+            selectedCategory: category,
             user: req.session.userId
                 ? {
                     id: req.session.userId,
@@ -24,7 +48,6 @@ exports.getAllBlogs = async (req, res) => {
         res.status(500).send("Unable to load blogs");
     }
 };
-
 
 // GET SINGLE BLOG
 exports.getSingleBlog = async (req, res) => {
