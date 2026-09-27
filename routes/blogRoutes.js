@@ -5,80 +5,79 @@ const router = express.Router();
 const blogController = require("../controllers/blogController");
 
 const {
-  isLoggedIn,
-  isAdmin
+    isLoggedIn,
+    isAdmin
 } = require("../middleware/authMiddleware");
 
-// =========================
-// SHOW ALL BLOGS
-// =========================
-
-router.get("/", blogController.getAllBlogs);
-
-// =========================
-// SHOW SINGLE BLOG
-// =========================
-
-router.get("/blog/:id", blogController.getSingleBlog);
-
-// =========================
-// CREATE BLOG PAGE
-// ADMIN ONLY
-// =========================
-
-router.get(
-  "/blog/create",
-  isLoggedIn,
-  isAdmin,
-  blogController.showCreateBlog
-);
 
 // =========================
 // CREATE BLOG
-// ADMIN ONLY
-// =========================
-
-router.post(
-  "/blog/create",
-  isLoggedIn,
-  isAdmin,
-  blogController.createBlog
-);
-
-// =========================
-// EDIT BLOG PAGE
-// ADMIN ONLY
 // =========================
 
 router.get(
-  "/blog/edit/:id",
-  isLoggedIn,
-  isAdmin,
-  blogController.showEditBlog
+    "/blog/create",
+    isLoggedIn,
+    isAdmin,
+    blogController.showCreateBlog
 );
-
-// =========================
-// UPDATE BLOG
-// ADMIN ONLY
-// =========================
 
 router.post(
-  "/blog/edit/:id",
-  isLoggedIn,
-  isAdmin,
-  blogController.updateBlog
+    "/blog/create",
+    isLoggedIn,
+    isAdmin,
+    blogController.createBlog
 );
+
+
+// =========================
+// EDIT BLOG
+// =========================
+
+router.get(
+    "/blog/edit/:id",
+    isLoggedIn,
+    isAdmin,
+    blogController.showEditBlog
+);
+
+router.post(
+    "/blog/edit/:id",
+    isLoggedIn,
+    isAdmin,
+    blogController.updateBlog
+);
+
 
 // =========================
 // DELETE BLOG
-// ADMIN ONLY
 // =========================
 
 router.post(
-  "/blog/delete/:id",
-  isLoggedIn,
-  isAdmin,
-  blogController.deleteBlog
+    "/blog/delete/:id",
+    isLoggedIn,
+    isAdmin,
+    blogController.deleteBlog
 );
+
+
+// =========================
+// VIEW SINGLE BLOG
+// =========================
+
+router.get(
+    "/blog/:id",
+    blogController.getSingleBlog
+);
+
+
+// =========================
+// HOME
+// =========================
+
+router.get(
+    "/",
+    blogController.getAllBlogs
+);
+
 
 module.exports = router;

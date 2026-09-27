@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav>
+
+    <h2>Admin Dashboard</h2>
+
+    <div>
+        <a href="/">Home</a>
+        <a href="/blog/create">Create Blog</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+</nav>
+
+
+<main>
+
+    <!-- USERS -->
+
+    <section>
+
+        <h2>Users</h2>
+
+        <% if (users.length === 0) { %>
+
+            <p>No users found.</p>
+
+        <% } else { %>
+
+            <% users.forEach(user => { %>
+
+                <div class="comment-card">
+
+                    <h3>
+                        <%= user.name %>
+                    </h3>
+
+                    <p>
+                        Email: <%= user.email %>
+                    </p>
+
+                    <p>
+                        Role: <%= user.role %>
+                    </p>
+
+                    <form
+                        action="/admin/user/delete/<%= user._id %>"
+                        method="POST"
+                    >
+
+                        <button type="submit">
+                            Delete User
+                        </button>
+
+                    </form>
+
+                </div>
+
+            <% }) %>
+
+        <% } %>
+
+    </section>
+
+
+    <hr>
+
+
+    <!-- BLOGS -->
+
+    <section>
+
+        <h2>Blogs</h2>
+
+        <% if (blogs.length === 0) { %>
+
+            <p>No blogs found.</p>
+
+        <% } else { %>
+
+            <% blogs.forEach(blog => { %>
+
+                <div class="blog-card">
+
+                    <h3>
+                        <%= blog.title %>
+                    </h3>
+
+                    <p>
+                        Category: <%= blog.category %>
+                    </p>
+
+                    <p>
+                        Author: <%= blog.author.name %>
+                    </p>
+
+                    <a href="/blog/<%= blog._id %>">
+                        View Blog
+                    </a>
+
+                    <br><br>
+
+                    <a href="/blog/edit/<%= blog._id %>">
+                        Edit Blog
+                    </a>
+
+                    <form
+                        action="/admin/blog/delete/<%= blog._id %>"
+                        method="POST"
+                        style="margin-top: 10px;"
+                    >
+
+                        <button type="submit">
+                            Delete Blog
+                        </button>
+
+                    </form>
+
+                </div>
+
+            <% }) %>
+
+        <% } %>
+
+    </section>
+
+
+    <hr>
+
+
+    <!-- COMMENTS -->
+
+    <section>
+
+        <h2>Comments</h2>
+
+        <% if (comments.length === 0) { %>
+
+            <p>No comments found.</p>
+
+        <% } else { %>
+
+            <% comments.forEach(comment => { %>
+
+                <div class="comment-card">
+
+                    <p>
+                        <strong>
+                            <%= comment.user.name %>
+                        </strong>
+                    </p>
+
+                    <p>
+                        <%= comment.text %>
+                    </p>
+
+                    <p>
+                        Blog:
+                        <%= comment.blog.title %>
+                    </p>
+
+                    <form
+                        action="/admin/comment/delete/<%= comment._id %>"
+                        method="POST"
+                    >
+
+                        <button type="submit">
+                            Delete Comment
+                        </button>
+
+                    </form>
+
+                </div>
+
+            <% }) %>
+
+        <% } %>
+
+    </section>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= blog.title %> - My Blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav>
+    <h2>My Blog</h2>
+
+    <div>
+        <a href="/">Home</a>
+
+        <% if (user) { %>
+            <span>Welcome, <%= user.name %></span>
+            <a href="/logout">Logout</a>
+
+            <% if (user.role === "admin") { %>
+                <a href="/admin/dashboard">Admin Dashboard</a>
+            <% } %>
+        <% } else { %>
+            <a href="/login">Login</a>
+            <a href="/signup">Signup</a>
+        <% } %>
+    </div>
+</nav>
+
+<main>
+
+    <!-- Blog -->
+    <article class="blog-card">
+
+        <h1><%= blog.title %></h1>
+
+        <p>
+            <strong>Category:</strong>
+            <%= blog.category %>
+        </p>
+
+        <p>
+            <strong>Author:</strong>
+            <%= blog.author.name %>
+        </p>
+
+        <% if (blog.image) { %>
+            <img
+                src="<%= blog.image %>"
+                alt="<%= blog.title %>"
+                style="max-width: 100%; height: auto;"
+            >
+        <% } %>
+
+        <div>
+            <p><%= blog.content %></p>
+        </div>
+
+    </article>
+
+
+    <!-- Comments -->
+    <section>
+
+        <h2>Comments</h2>
+
+        <% if (comments.length === 0) { %>
+
+            <p>No comments yet. Be the first to comment!</p>
+
+        <% } else { %>
+
+            <% comments.forEach(comment => { %>
+
+                <div class="comment-card">
+
+                    <strong>
+                        <%= comment.user.name %>
+                    </strong>
+
+                    <p>
+                        <%= comment.text %>
+                    </p>
+
+                    <% if (user && user.id.toString() === comment.user._id.toString()) { %>
+
+                        <form
+                            action="/comment/delete/<%= comment._id %>"
+                            method="POST"
+                        >
+                            <button type="submit">
+                                Delete
+                            </button>
+                        </form>
+
+                    <% } %>
+
+                </div>
+
+            <% }) %>
+
+        <% } %>
+
+
+        <!-- Add Comment -->
+
+        <% if (user) { %>
+
+            <h3>Add a Comment</h3>
+
+            <form
+                action="/comment/<%= blog._id %>"
+                method="POST"
+            >
+
+                <textarea
+                    name="text"
+                    placeholder="Write your comment..."
+                    required
+                    rows="5"
+                    style="width: 100%;"
+                ></textarea>
+
+                <button type="submit">
+                    Post Comment
+                </button>
+
+            </form>
+
+        <% } else { %>
+
+            <p>
+                <a href="/login">Login</a>
+                to post a comment.
+            </p>
+
+        <% } %>
+
+    </section>
+
+</main>
+
+</body>
+</html>
