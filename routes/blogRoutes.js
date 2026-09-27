@@ -1,6 +1,7 @@
 const express = require("express");
-
 const router = express.Router();
+
+const multer = require("multer");
 
 const blogController = require("../controllers/blogController");
 
@@ -8,6 +9,30 @@ const {
     isLoggedIn,
     isAdmin
 } = require("../middleware/authMiddleware");
+
+
+// =========================
+// MULTER IMAGE STORAGE
+// =========================
+
+const storage = multer.diskStorage({
+
+    destination: function (req, file, cb) {
+        cb(null, "public/uploads/");
+    },
+
+    filename: function (req, file, cb) {
+        const uniqueName =
+            Date.now() + "-" + file.originalname;
+
+        cb(null, uniqueName);
+    }
+
+});
+
+const upload = multer({
+    storage: storage
+});
 
 
 // =========================
@@ -25,6 +50,7 @@ router.post(
     "/blog/create",
     isLoggedIn,
     isAdmin,
+    upload.single("image"),
     blogController.createBlog
 );
 
@@ -44,6 +70,7 @@ router.post(
     "/blog/edit/:id",
     isLoggedIn,
     isAdmin,
+    upload.single("image"),
     blogController.updateBlog
 );
 

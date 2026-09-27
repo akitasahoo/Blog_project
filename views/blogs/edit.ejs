@@ -1,61 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Edit Blog</title>
-    <link rel="stylesheet" href="/css/style.css">
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
 </head>
+
 <body>
 
 <nav>
+
     <h2>My Blog</h2>
 
     <div>
+
         <a href="/">Home</a>
-        <a href="/admin/dashboard">Admin Dashboard</a>
-        <a href="/logout">Logout</a>
+
+        <a href="/admin/dashboard">
+            Admin Dashboard
+        </a>
+
+        <a href="/logout">
+            Logout
+        </a>
+
     </div>
+
 </nav>
+
 
 <div class="auth-container">
 
     <h1>Edit Blog</h1>
 
+
     <form
         action="/blog/edit/<%= blog._id %>"
         method="POST"
+        enctype="multipart/form-data"
     >
 
         <input
             type="text"
             name="title"
             value="<%= blog.title %>"
-            placeholder="Blog Title"
             required
         >
+
 
         <input
             type="text"
             name="category"
             value="<%= blog.category %>"
-            placeholder="Category"
             required
         >
 
+
+        <% if (blog.image) { %>
+
+            <p>Current Image:</p>
+
+            <img
+                src="<%= blog.image %>"
+                alt="Blog Image"
+                style="
+                    width: 200px;
+                    border-radius: 8px;
+                    margin-bottom: 15px;
+                "
+            >
+
+        <% } %>
+
+
+        <label>
+            Choose New Image
+        </label>
+
         <input
-            type="text"
+            type="file"
             name="image"
-            value="<%= blog.image %>"
-            placeholder="Image URL"
+            accept="image/*"
         >
+
 
         <textarea
             name="content"
             rows="10"
             required
-            style="width: 100%; padding: 12px; margin-bottom: 15px;"
         ><%= blog.content %></textarea>
+
 
         <button type="submit">
             Update Blog
@@ -66,4 +113,5 @@
 </div>
 
 </body>
+
 </html>
